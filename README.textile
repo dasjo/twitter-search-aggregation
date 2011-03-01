@@ -1,4 +1,13 @@
-h1. Twitter Node.js WebSockets Example
+h1. Twitter search aggregation based on streaming directly to browser with Node.js and HTML5 websockets
+
+Information Search on the Internet - Practical Project
+
+Josef Dabernig, e0927232@student.tuwien.ac.at, WS2010
+
+Based on the twitter-nodejs-websocket project (https://github.com/andregoncalves/twitter-nodejs-websocket) by @andregoncalves.
+
+
+h2. Twitter Node.js WebSockets Example
 
 Quick experiment of direct streaming from twitter to the browser, with no polling, using Node.js.
 (Follow up to Ruben Fonseca "version":http://github.com/rubenfonseca/twitter-amqp-websocket-example with Ruby and AMQP)

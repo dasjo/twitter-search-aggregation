@@ -7,10 +7,9 @@ var sys    = require('sys'),
 // Command line args
 var USERNAME = process.ARGV[2];
 var PASSWORD = process.ARGV[3];
-var KEYWORD  = process.ARGV[4] || "iphone";
 
 if (!USERNAME || !PASSWORD)
-  return sys.puts("Usage: node server.js <twitter_username> <twitter_password> <keyword>");
+  return sys.puts("Usage: node server.js <twitter_username> <twitter_password>");
 
 // Authentication Headers for Twitter
 var auth = base64.encode(USERNAME + ':' + PASSWORD);
@@ -22,32 +21,59 @@ var headers = {
 var clients = [];
 
 // Connection to Twitter's streaming API
-var twitter = http.createClient(80, "stream.twitter.com");
-var request = twitter.request("GET", "/1/statuses/filter.json?track=" + KEYWORD, headers);
+var twitter;
+var request;
 
-request.addListener('response', function (response) {
-  response.setEncoding("utf8");
+var tweets = "";
+var tweetsResponse;
+
+//var request = twitter.request("GET", "/1/statuses/sample.json");
+
+responseListener = function(chunk) {
+  // Send response to all connected clients
+  tweets += chunk;
   
-  response.addListener("data", function (chunk) {
-    // Send response to all connected clients
+  if((tweets.split(/{/g).length - 1) == (tweets.split(/}/g).length - 1)) {
+    console.log(tweets.substring(0, 50));
     
     clients.each(function(c) {
-      c.write(chunk);
+      c.write(tweets);
     });
-  });
-});
-request.end();
+    
+    tweets = "";
+  }
+}
+
+responseFunction = function (response) {
+  response.setEncoding("utf8");
+  response.addListener("data", responseListener);
+  tweetsResponse = response;
+}
 
 // Websocket TCP server
 ws.createServer(function (websocket) {
   clients.push(websocket);
+  
+  websocket.addListener("data", function(message){
+    if(tweetsResponse) {
+      tweetsResponse.removeListener("data", responseListener);
+    }
+
+    twitter = http.createClient(80, "stream.twitter.com");
+    request = twitter.request("GET", "/1/statuses/filter.json?track=" + message, headers);
+    request.addListener('response', responseFunction);
+    request.end();
+    console.log("Now searching for: " + message);
+
+  });
 
   websocket.addListener("connect", function (resource) {
     // emitted after handshake
     sys.debug("connect: " + resource);
+        
   }).addListener("close", function () {
     // emitted when server or client closes connection
     clients.remove(websocket);
     sys.debug("close");
   });
-}).listen(8080);
+}).listen(8081);

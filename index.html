@@ -2,37 +2,75 @@
   "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
 <head>
-  <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js'></script>
-  <script>
-  $(document).ready(function(){
-    if(!("WebSocket" in window)) {
-      alert("Sorry, the build of your browser does not support WebSockets. Please use latest Chrome or Webkit nightly");
-      return;
-    }
-    
-    ws = new WebSocket("ws://localhost:8080/");
-    ws.onmessage = function(evt) { 
-      data = eval("(" + evt.data + ")");
-      var p = $("<div class='tweet' style='display:none'><div class='content'><a class='main-screenname' href='http://www.twitter.com/" + data.user.screen_name + "/status/" + data.id + "' target='_blank'>" + data.user.screen_name + "</a> " + data.text + "</div></div>");
-      if($('#tweets div.tweet').size() > 15) {
-        $('#tweets div.tweet:last').slideDown(100, function() {
-          $(this).remove();
-        });
-      }
-      $('#tweets').prepend(p);
-      p.slideDown(140);
-    };
-    ws.onclose = function() {
-      alert("socket closed");
-    };
-    ws.onopen = function() {
-      //alert("connected...");
-    };
-  });
-  </script>
+  <link rel="stylesheet" href="style.css">
+  <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js'></script>
+  <script src='../jquery.tinysort.min.js'></script>
+
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <!-- Note that you need to replace the key ABCDEF with your Maps API key. -->
+  <!-- Sign up for a Maps API key here: http://code.google.com/apis/maps/signup.html -->
+  <script src="http://maps.google.com/maps?file=api&v=2&api;key=ABCDEF"
+    type="text/javascript"></script>
+
+  <script src='client.js'></script>
 </head>
 <body>
-  <div id="tweets">
+
+  <div id="controls">
+    <h2>Controls</h2>
+    <div id="search" class="box">
+      <h3>Search</h3>
+      <input id="searchbox" type="text" value="search..." />
+    </div>
+
+    <div class="box">
+      <h3>Top Tags</h3>
+      <ul id="tags">
+      </ul>
+      <a href="#" onclick="reset('tags')">reset tags</a>
+    </div>
+
+    <div class="box">
+      <h3>Top User Mentions</h3>
+      <ul id="user_mentions">
+      </ul>
+      <a href="#" onclick="reset('user_mentions')">reset user mentions</a>
+    </div>
   </div>
+
+  <div id="vis">
+    <h2>Visualization</h2>
+
+    <div class="box">
+      <h3>Top Tags</h3>
+      <div id="chart_tags" class="vis"></div>
+
+    </div>
+    <div class="box">
+      <h3>Top User Mentions</h3>
+      <div id="chart_user_mentions" class="vis"></div>
+
+    </div>
+  </div>
+
+  <div id="main">
+    <h1>Current tweets for: <span id="searchterm">searchterm</span></h1>
+    <div id="tweets">
+    </div>
+  </div>
+
+  <div id="footer" class="box">
+    <h2>Twitter Search Aggregation</h2>
+    <p>
+    Information Search on the Internet - Practical Project
+    </p>
+    <p>
+    Josef Dabernig, <a href="mailto:e0927232@student.tuwien.ac.at">e0927232@student.tuwien.ac.at</a>, WS2010
+    </p>
+    <p>
+    Based on the <a href="https://github.com/andregoncalves/twitter-nodejs-websocket">twitter-nodejs-websocket</a> project (Twitter streaming directly to browser with Node.js and HTML5 websockets).
+    </p>
+  </div>
+
 </body>
 </html>

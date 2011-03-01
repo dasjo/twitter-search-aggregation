@@ -1,0 +1,39 @@
+#main {
+  margin-left: 250px;
+}
+
+#controls {
+  float: left;
+  width: 230px;
+  margin-right: 20px;
+}
+
+.box {
+  border: 1px solid black;
+  margin-bottom: 2em;
+  padding: 1em;
+  padding-top: 0;
+  overflow: hidden;
+}
+
+.box .ul {
+  padding-left: 1.5em;
+}
+
+.box .item {
+  white-space: nowrap;
+}
+
+#vis {
+  float: right;
+  width: 250px;
+  margin-left: 20px;
+}
+
+#vis .vis {
+  height: 150px;
+}
+
+#footer {
+  clear: both;
+}
