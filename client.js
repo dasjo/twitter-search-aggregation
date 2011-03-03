@@ -4,7 +4,7 @@ counter["user_mentions"] = [];
 var maxItemCount = 0;
 var itemLimit = 5;
 
-var tweetLimit = 25;
+var tweetLimit = 15;
 var ws;
 
 var currentTerm = "";
