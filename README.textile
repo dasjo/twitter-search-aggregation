@@ -1,5 +1,9 @@
 h1. Twitter search aggregation based on streaming directly to browser with Node.js and HTML5 websockets
 
+Twitter Search Aggregation prototypes a light-weight approach to aggregating data optained from twitter via search.
+Using modern web technologies as a node.js server and a JavaScript-driven HTML5 websockets client, Twitter Search Aggregation is an exemplary application of such post-processing based on twitter.
+It allows the end-user to observe a given topic by executing real-time text search and live-tracking of twitter entities such as hashtags and user mentions.
+
 Information Search on the Internet - Practical Project
 
 Josef Dabernig, e0927232@student.tuwien.ac.at, WS2010
